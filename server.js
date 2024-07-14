@@ -52,10 +52,10 @@ httpApp.use((req, res, next) => {
   next();
 });
 
-// Listen on port 80 for HTTP requests
+// Listen on port 5001 for HTTP requests
 const httpServer = http.createServer(httpApp);
-httpServer.listen(80, () => {
-  console.log('HTTP Server running on port 80');
+httpServer.listen(5001, () => {
+  console.log('HTTP Server running on port 5001');
 });
 
 // Listen on port 443 for HTTPS requests
