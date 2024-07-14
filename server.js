@@ -54,7 +54,7 @@ httpApp.use((req, res, next) => {
 
 // Listen on port 80 for HTTP requests
 const httpServer = http.createServer(httpApp);
-httpServer.listen(8080, () => {
+httpServer.listen(5000, () => {
   console.log('HTTP Server running on port 80');
 });
 
