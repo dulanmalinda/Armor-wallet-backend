@@ -109,4 +109,38 @@ exports.checkWalletAddress = async (req, res) => {
   }
 };
 
+exports.getPromptsByWalletAddress = async (req, res) => {
+  const { walletAddress } = req.query;
+
+  if (!walletAddress) {
+    return res.status(400).json({ msg: 'Wallet Address is required' });
+  }
+
+  try {
+    const prompts = await Prompt.find({ walletAddress });
+
+    if (prompts.length > 0) {
+      return res.status(200).json({ exists: true, prompts });
+    } else {
+      return res.status(200).json({ exists: false, prompts: [] });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+exports.getTopPrompts = async (req, res) => {
+  try {
+    const topPrompts = await Prompt.find({})
+      .sort({ upVoteCount: -1 })
+      .limit(50);
+
+    return res.status(200).json({ prompts: topPrompts });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
+
 // Other controllers (getUser, updateUser, deleteUser) can be added here.
