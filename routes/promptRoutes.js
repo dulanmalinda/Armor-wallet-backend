@@ -1,6 +1,6 @@
 // routes/userRoutes.js
 const express = require('express');
-const { createPrompt, getPrompts,updateVoteCount,removeVote,checkWalletAddress,getPromptsByWalletAddress,getTopPrompts,getRecentPromptsWithLowVotes } = require('../controllers/propmtController');
+const { createPrompt, getPrompts,updateVoteCount,removeVote,checkWalletAddress,getPromptsByWalletAddress,getTopPrompts,getRecentPromptsWithLowVotes,getPromptsDateSorted } = require('../controllers/propmtController');
 const { getUserPromptCount, incrementPromptCount, incrementVoteCount, decrementVoteCount} = require('../controllers/usersController');
 const router = express.Router();
 
@@ -12,6 +12,7 @@ router.get('/check-wallet',checkWalletAddress)
 router.get('/get_prompts_by_wallet',getPromptsByWalletAddress)
 router.get('/get_top_prompts',getTopPrompts)
 router.get('/get_newest_prompts',getRecentPromptsWithLowVotes)
+router.get('/get_all_date_sorted_prompts',getPromptsDateSorted)
 
 router.get('/user', getUserPromptCount);
 router.post('/user/increment', incrementPromptCount);

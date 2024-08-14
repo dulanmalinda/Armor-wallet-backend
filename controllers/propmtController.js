@@ -21,6 +21,15 @@ exports.getPrompts = async (req, res) => {
   }
 };
 
+exports.getPromptsDateSorted = async (req, res) => {
+  try {
+    const prompts = await Prompt.find().sort({ _id: -1  });
+    res.status(200).json(prompts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.getRecentPromptsWithLowVotes = async (req, res) => {
   try {
     const recentPrompts = await Prompt.find({
