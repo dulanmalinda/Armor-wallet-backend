@@ -25,7 +25,7 @@ exports.getRecentPromptsWithLowVotes = async (req, res) => {
   try {
     const recentPrompts = await Prompt.find({
       upVoteCount: { $lte: 1 }
-    }).sort({ createdAt: -1 });
+    }).sort({ _id: -1 });
 
     res.status(200).json(recentPrompts);
   } catch (error) {
