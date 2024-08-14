@@ -21,6 +21,19 @@ exports.getPrompts = async (req, res) => {
   }
 };
 
+exports.getRecentPromptsWithLowVotes = async (req, res) => {
+  try {
+    const recentPrompts = await Prompt.find({
+      upVoteCount: { $lte: 1 }
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(recentPrompts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 exports.updateVoteCount = async (req, res) => {
   const { id } = req.params; // Prompt ID from the URL parameters
   const { voteType,votedWalletAddress } = req.body; // Type of vote: 'upvote' or 'downvote'
