@@ -12,6 +12,23 @@ exports.createPrompt = async (req, res) => {
   }
 };
 
+exports.getStructuredPromptsData = async (req, res) => {
+  try {
+    const prompts = await Prompt.find().sort({ upVoteCount: -1 });
+    const recentPromptsWithLowVotes = await Prompt.find({
+      upVoteCount: { $lte: 1 }
+    }).sort({ _id: -1 });
+
+    res.status(200).json({
+      prompts,
+      recentPromptsWithLowVotes,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 exports.getPrompts = async (req, res) => {
   try {
     const prompts = await Prompt.find().sort({ upVoteCount: -1  });
