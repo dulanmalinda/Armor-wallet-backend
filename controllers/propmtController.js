@@ -132,22 +132,24 @@ exports.removeVote = async (req, res) => {
     const updatedPrompt = await Prompt.findByIdAndUpdate(id, update, { new: true });
 
     // Update user document
+    const user = await User.findOne({ walletAddress: votedWalletAddress });
+
     let updateUser = {};
     if (voteType === 'upvote') {
-      if (User.upVotedPrompts.includes(id)) {
+      if (user.upVotedPrompts.includes(id)) {
         updateUser = {
           $pull: { upVotedPrompts: id },
         };
       }
     } else {
-      if (User.downVotedPrompts.includes(id)) {
+      if (user.downVotedPrompts.includes(id)) {
         updateUser = {
           $pull: { downVotedPrompts: id },
         };
       }
     }
-
-    const updatedUser = await User.findOneAndUpdate({ walletAddress: votedWalletAddress }, updateUser, { new: true });
+    
+    const updatedUser = await user.updateOne(updateUser, { new: true });
 
     res.status(200).json(updatedPrompt);
   } catch (error) {
