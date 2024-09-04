@@ -14,6 +14,14 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  upVotedPrompts: {
+    type : Array,
+    default: []
+  },
+  downVotedPrompts: {
+    type : Array,
+    default: []
+  }
 });
 
 const User = mongoose.model('User', UserSchema);

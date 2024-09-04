@@ -1,4 +1,5 @@
 const Prompt = require('../models/prompt');
+const User = require('../models/User');
 
 exports.createPrompt = async (req, res) => {
   const { walletAddress, prompt, upVoteCount, downVoteCount, upVotedWallets,downVotedWallets } = req.body;
@@ -59,7 +60,6 @@ exports.getRecentPromptsWithLowVotes = async (req, res) => {
   }
 };
 
-
 exports.updateVoteCount = async (req, res) => {
   const { id } = req.params; // Prompt ID from the URL parameters
   const { voteType,votedWalletAddress } = req.body; // Type of vote: 'upvote' or 'downvote'
@@ -77,6 +77,16 @@ exports.updateVoteCount = async (req, res) => {
 
     if (!updatedPrompt) {
       return res.status(404).json({ message: 'Prompt not found.' });
+    }
+
+    // Update the User document
+    const updateUser = {
+      $push: voteType === 'upvote' ? { upVotedPrompts: id } : { downVotedPrompts: id }
+    };
+    const updatedUser = await User.findOneAndUpdate({ walletAddress: votedWalletAddress }, updateUser, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found.' });
     }
 
     res.status(200).json(updatedPrompt);
