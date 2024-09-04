@@ -131,6 +131,13 @@ exports.removeVote = async (req, res) => {
 
     const updatedPrompt = await Prompt.findByIdAndUpdate(id, update, { new: true });
 
+    // Update user document
+    await User.findOneAndUpdate(
+      { walletAddress: votedWalletAddress },
+      { $pull: { [userUpdateField]: id } },
+      { new: true }
+    );
+
     res.status(200).json(updatedPrompt);
   } catch (error) {
     res.status(500).json({ message: error.message });
